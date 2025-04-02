@@ -58,13 +58,12 @@ end
 -- Last time this was tested it would not work very well with stone walls.
 function AGS_Fortified_CreateWalls()
 	for _, player in pairs(PLAYERS) do
-		if player.raceName ~= AGS_CIV_MONGOL then
-			local palisade_blueprint = AGS_GetCivilizationEntity(player.raceName, AGS_BP_PALISADE)
-			local palisade_gate_blueprint = AGS_GetCivilizationEntity(player.raceName, AGS_BP_PALISADE_GATE)
-			local spawn_position = AGS_Starts_GetStartPosition(player.id)			
-			AGS_Fortified_WallAroundPosition(player, palisade_blueprint, palisade_gate_blueprint, spawn_position)
-		end		
-	end	
+		-- Every civ including Mongols gets walls
+		local palisade_blueprint = AGS_GetCivilizationEntity('rus', AGS_BP_PALISADE)
+		local palisade_gate_blueprint = AGS_GetCivilizationEntity('rus', AGS_BP_PALISADE_GATE)
+		local spawn_position = AGS_Starts_GetStartPosition(player.id)			
+		AGS_Fortified_WallAroundPosition(player, palisade_blueprint, palisade_gate_blueprint, spawn_position)
+	end
 end
 
 function AGS_Fortified_WallAroundPosition(player, wall_bp, gate_bp, center_position)
@@ -76,7 +75,7 @@ function AGS_Fortified_WallAroundPosition(player, wall_bp, gate_bp, center_posit
 		local start_at = World_Pos(0, 0, 0)
 		local close_at = World_Pos(0, 0, 0)
 		start_at = AGS_Fortified_StartCoordinates(center_position, corner)
-		for i=1, idx_end do 
+		for i=1, idx_end do
 			close_at = AGS_Fortified_AdjustCoordinates(start_at, step, step_size)
 			LocalCommand_PlayerPlaceAndConstructSlottedSplinePlanned(player.id, wall_bp, start_at, close_at, false, false)
 			start_at = close_at
